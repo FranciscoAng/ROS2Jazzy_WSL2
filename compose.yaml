@@ -1,0 +1,17 @@
+services:
+  ros2:
+    container_name: "ROS2-Jazzy_Service"
+    build: ros2
+    #image: osrf/ros:jazzy-desktop
+    tty: true
+    stdin_open: true
+    environment:
+      - DISPLAY=${DISPLAY:-:0}
+      - WAYLAND_DISPLAY=wayland-0
+      - XDG_RUNTIME_DIR=/mnt/wslg/runtime-dir
+      - PULSE_SERVER=/mnt/wslg/PulseServer
+    volumes:
+      - /run/desktop/mnt/host/wslg/.X11-unix:/tmp/.X11-unix
+      - /run/desktop/mnt/host/wslg:/mnt/wslg
+    #network_mode: "host"
+    #ipc: "host"
