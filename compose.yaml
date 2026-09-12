@@ -13,5 +13,6 @@ services:
     volumes:
       - /run/desktop/mnt/host/wslg/.X11-unix:/tmp/.X11-unix
       - /run/desktop/mnt/host/wslg:/mnt/wslg
+      - ./ros2/mobile_robot:/mobile_robot
     #network_mode: "host"
     #ipc: "host"
