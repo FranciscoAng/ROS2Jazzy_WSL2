@@ -1,3 +1,5 @@
+import os
+from glob import glob
 from setuptools import find_packages, setup
 
 package_name = 'mobile_robot'
@@ -10,6 +12,12 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        #Include launch files
+        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
+        #Include URDF / XACRO
+        (os.path.join('share', package_name, 'models'), glob(os.path.join('model', '*.urdf')) + glob(os.path.join('model', '*.xacro'))),
+        #Include meshes (.STL or .DAE)
+        (os.path.join('share', package_name, 'meshes'), glob(os.path.join('meshes', '*'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
