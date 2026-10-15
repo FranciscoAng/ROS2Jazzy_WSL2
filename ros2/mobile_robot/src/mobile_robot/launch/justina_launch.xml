@@ -1,5 +1,13 @@
+<?xml version="1.0"?>
+
 <launch>
-  <let name="urdf_path" value="$(find-pkg-share mobile_robot)/models/robot_core.xacro"/>
+
+  <arg name="urdf_path" default="$(find-pkg-share mobile_robot)/models/robot_urdf.xacro"/>
+
+  <arg name="start_gazebo" default="true"/>
+  <arg name="start_rviz" default="true"/>
+
+  <let name="gazebo_launch" value="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py"/>
 
   <node pkg="robot_state_publisher" exec="robot_state_publisher">
     <param name="robot_description" value="$(command 'xacro $(var urdf_path)')"/>
@@ -7,4 +15,12 @@
   <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui" name="joint_state_publisher_gui" output="screen"/>
   
   <node pkg="rviz2" exec="rviz2" output="screen"/>
+
+  <group if="$(var start_gazebo)">
+    <include file="$(var gazebo_launch)">
+      <arg name="gz_args" value="-r empty.sdf"/>
+    </include>
+    <node pkg="ros_gz_sim" exec="create" name="spawn_robot_urdf"
+      args="-topic robot_description -name bot_entity" output="screen"/>
+  </group>
 </launch>
