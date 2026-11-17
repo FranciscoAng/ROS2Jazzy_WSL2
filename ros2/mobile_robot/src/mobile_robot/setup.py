@@ -18,6 +18,10 @@ setup(
         (os.path.join('share', package_name, 'models'), glob(os.path.join('model', '*.urdf')) + glob(os.path.join('model', '*.xacro'))),
         #Include meshes (.STL or .DAE)
         (os.path.join('share', package_name, 'meshes'), glob(os.path.join('meshes', '*'))),
+        #Include config files
+        (os.path.join('share', package_name, 'config'), glob(os.path.join('config', '*.yaml'))),
+        #Include worlds
+        (os.path.join('share', package_name, 'worlds'), glob(os.path.join('worlds', '*.sdf')))
     ],
     install_requires=['setuptools'],
     zip_safe=True,

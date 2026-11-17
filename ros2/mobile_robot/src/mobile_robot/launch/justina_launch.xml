@@ -3,6 +3,8 @@
 <launch>
 
   <arg name="urdf_path" default="$(find-pkg-share mobile_robot)/models/robot_urdf.xacro"/>
+  <arg name="gazebo_config_path" default="$(find-pkg-share mobile_robot)/config/gazebo_bridge.yaml"/>
+  <arg name="gazebo_world_path" default="$(find-pkg-share mobile_robot)/worlds/world1.sdf"/>
 
   <arg name="start_gazebo" default="true"/>
   <arg name="start_rviz" default="true"/>
@@ -11,16 +13,28 @@
 
   <node pkg="robot_state_publisher" exec="robot_state_publisher">
     <param name="robot_description" value="$(command 'xacro $(var urdf_path)')"/>
+    <param name="use_sim_time" value="true" />
   </node>
-  <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui" name="joint_state_publisher_gui" output="screen"/>
   
-  <node pkg="rviz2" exec="rviz2" output="screen"/>
-
+  <!-- 
+  <node pkg="joint_state_publisher_gui" exec="joint_state_publisher_gui" name="joint_state_publisher_gui" output="screen"/>
+  -->
+  
   <group if="$(var start_gazebo)">
     <include file="$(var gazebo_launch)">
-      <arg name="gz_args" value="-r empty.sdf"/>
+      <arg name="gz_args" value="-r $(var gazebo_world_path)"/>
     </include>
+
     <node pkg="ros_gz_sim" exec="create" name="spawn_robot_urdf"
-      args="-topic robot_description -name bot_entity" output="screen"/>
+      args="-topic robot_description -name my_robot" output="screen"/>
+    <!-- 
+    <node pkg="ros_gz_bridge" exec="parameter_bridge" name="ros_gz_bridge" output="screen" args="/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist /odom@nav_msgs/msg/Odometry@gz.msgs.Odometry /clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"/>
+    -->
+    <node pkg="ros_gz_bridge" exec="parameter_bridge">
+      <param name="config_file" value="$(var gazebo_config_path)"/>
+    </node>
+
   </group>
+
+  <node pkg="rviz2" exec="rviz2" output="screen"/>
 </launch>
