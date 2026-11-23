@@ -21,7 +21,9 @@ setup(
         #Include config files
         (os.path.join('share', package_name, 'config'), glob(os.path.join('config', '*.yaml'))),
         #Include worlds
-        (os.path.join('share', package_name, 'worlds'), glob(os.path.join('worlds', '*.sdf')))
+        (os.path.join('share', package_name, 'worlds'), glob(os.path.join('worlds', '*.sdf'))),
+        #Include scripts
+        #(os.path.join('share', package_name, 'scripts'), glob(os.path.join('scripts', '*.py')))
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -36,6 +38,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'filters = mobile_robot.filters:main'
         ],
     },
 )
